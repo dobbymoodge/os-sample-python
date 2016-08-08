@@ -1,10 +1,10 @@
 from flask import Flask
 application = Flask(__name__)
 
-@application.route("/<string:arg1>")
-def hello(arg1):
-    if arg1:
-        return "Hello my main daimie! %s"%arg1
+@application.route("/", methods=['GET'])
+def hello():
+    if request.args.get('q', ""):
+        return "Hello my main daimie! %s"%(request.args.get('q', ""),)
     else:
         return "Hello World!"
 
