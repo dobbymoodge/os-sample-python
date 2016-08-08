@@ -82,7 +82,7 @@
                     "sourceStrategy": {
                         "from": {
                             "kind": "ImageStreamTag",
-                            "namespace": "${NAMESPACE}",
+                            "namespace": "openshift",
                             "name": "python:3.5"
                         },
                         "env": [
@@ -207,7 +207,7 @@
                                     {
                                         "name": "APP_CONFIG",
                                         "value": "${APP_CONFIG}"
-                                    },
+                                    }
                                 ],
                                 "resources": {
                                     "limits": {
@@ -440,7 +440,7 @@
         {
             "name": "APP_CONFIG",
             "displayName": "Application Configuration File Path",
-            "description": "Relative path to Gunicorn configuration file (optional)."
+            "description": "Relative path to Gunicorn configuration file (optional).",
             "value": "config.py"
         },
         {
