@@ -265,7 +265,7 @@
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
-                                "namespace": "${NAMESPACE}",
+                                "namespace": "openshift",
                                 "name": "postgresql:9.5"
                             }
                         }
@@ -360,7 +360,7 @@
             "displayName": "Namespace",
             "required": true,
             "description": "The OpenShift Namespace where the ImageStream resides.",
-            "value": "zargon"
+            "value": "openshift"
         },
         {
             "name": "MEMORY_LIMIT",
