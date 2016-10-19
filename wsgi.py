@@ -16,30 +16,49 @@ variants = db.Table('variants',
                     db.Column('game_id', db.Integer, db.ForeignKey('game.id'))
 )
 
-player_sessions = db.Table('player_sessions',
-                           db.Column('game_sessions_id', db.Integer, db.ForeignKey('game_sessions.id')),
-                           db.Column('player_id', db.Integer, db.ForeignKey('player.id'))
-)
+# player_sessions = db.Table('player_sessions',
+#                            db.Column('game_sessions_id', db.Integer, db.ForeignKey('game_sessions.id')),
+#                            db.Column('player_id', db.Integer, db.ForeignKey('player.id'))
+# )
 
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     screen_name = db.Column(db.String(160), unique=True)
     desk_location = db.Column(db.String(160), unique=True)
-    games = db.relationship('Game', secondary=games, backref=db.backref('players', lazy='dynamic'))
+    games = db.relationship('Game', secondary=games, backref=db.backref('players'))
+
+    def __init__(self, username, screen_name):
+        self.username = username
+        self.screen_name = screen_name
+
+    def __repr__(self):
+        return "<Player: %s (%s)>" % (self.screen_name, self.username)
 
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.Text)
-    variants = db.relationship('Game', secondary=variants, backref=db.backref('games', lazy='dynamic'))
-    owners = db.relationship('Player', secondary=games, backref=db.backref('players', lazy='dynamic'))
+    variants = db.relationship('Game', secondary=variants, backref=db.backref('games'))
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "<Game: %s>" % self.name
 
 class GameSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     play_date = db.Column(db.DateTime)
-    players = db.relationship('Player', secondary=game_sessions, backref=db.backref('players', lazy='dynamic'))
+    players = db.relationship('Player', backref='player')
+    winner = db.Column(db.Integer, db.ForeignKey('player.id'))
+    game = db.Column(db.Integer, db.ForeignKey('game.id'))
 
+    def __init__(self, play_date):
+        self.play_date = play_date
+
+    def __repr__(self):
+        return "<GameSession date: %s, Game: %s>" % (self.play_date, self.game.name)
 
 @application.route("/health")
 def health():
